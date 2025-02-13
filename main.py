@@ -4,18 +4,22 @@ import os
 import pygame
 from game_objects import Background, Player, Enemy, Bullet, Explosion, Fuel, \
                     Powerup, Button, Message, BlinkingText
-
-# Função para corrigir caminhos de recursos
 def resource_path(relative_path):
-    """ Retorna o caminho absoluto para um recurso. """
-    if hasattr(sys, '_MEIPASS'):
-        # Executável empacotado (PyInstaller)
-        base_path = sys._MEIPASS
-    else:
-        # Execução normal (desenvolvimento)
-        base_path = os.path.abspath(".")
+    """Obtenha o caminho absoluto para um arquivo dentro do diretório de execução ou da pasta 'dist'."""
+    try:
+        # Para o ambiente PyInstaller
+        if getattr(sys, 'frozen', False):
+            # Se estiver em um ambiente PyInstaller
+            base_path = sys._MEIPASS
+        else:
+            # Caso contrário, no ambiente de desenvolvimento
+            base_path = os.path.abspath(".")
+        
+        return os.path.join(base_path, relative_path)
+    except Exception as e:
+        print(f"Erro ao acessar o recurso: {e}")
+        return None
 
-    return os.path.join(base_path, relative_path)
 
 pygame.init()
 SCREEN = WIDTH, HEIGHT = 288, 512

@@ -1,5 +1,6 @@
 import pygame
 import os
+from main import resource_path
 
 
 SCREEN = WIDTH, HEIGHT = 288, 512
@@ -10,7 +11,7 @@ class Background():
     def __init__(self, win):
         self.win = win
 
-        self.image = pygame.image.load('Assets/bg.png')
+        self.image = pygame.image.load(resource_path('Assets/bg.png'))
         self.image = pygame.transform.scale(self.image, (WIDTH, HEIGHT))
         self.rect = self.image.get_rect()
 
@@ -27,8 +28,8 @@ class Background():
             if self.y2 >= HEIGHT:
                 self.y2 = -HEIGHT
 
-        self.win.blit(self.image, (self.x,self.y1))
-        self.win.blit(self.image, (self.x,self.y2))
+        self.win.blit(self.image, (self.x, self.y1))
+        self.win.blit(self.image, (self.x, self.y2))
 
     def reset(self):
         self.x = 0
@@ -41,7 +42,7 @@ class Player:
 
         self.image_list = []
         for i in range(2):
-            img = pygame.image.load(f'Assets/player{i+1}.png')
+            img = pygame.image.load(resource_path(f'Assets/player{i+1}.png'))
             img = pygame.transform.scale(img, (100, 86))
             self.image_list.append(img)
 
@@ -95,15 +96,15 @@ class Enemy(pygame.sprite.Sprite):
         self.image_list = []
         for i in range(2):
             if type_ == 1:
-                img = pygame.image.load(f'Assets/enemy1-{i+1}.png')
+                img = pygame.image.load(resource_path(f'Assets/enemy1-{i+1}.png'))
             if type_ == 2:
-                img = pygame.image.load(f'Assets/enemy2-{i+1}.png')
+                img = pygame.image.load(resource_path(f'Assets/enemy2-{i+1}.png'))
             if type_ == 3:
-                img = pygame.image.load(f'Assets/enemy3-{i+1}.png')
+                img = pygame.image.load(resource_path(f'Assets/enemy3-{i+1}.png'))
             if type_ == 4:
-                img = pygame.image.load(f'Assets/chopper1-{i+1}.png')
+                img = pygame.image.load(resource_path(f'Assets/chopper1-{i+1}.png'))
             if type_ == 5:
-                img = pygame.image.load(f'Assets/chopper2-{i+1}.png')
+                img = pygame.image.load(resource_path(f'Assets/chopper2-{i+1}.png'))
 
             w, h = img.get_width(), img.get_height()
             height = (100 * h) // w
@@ -126,9 +127,9 @@ class Enemy(pygame.sprite.Sprite):
         self.bullet_counter = 0
 
         if self.type in (1,2,3):
-            self.fx = pygame.mixer.Sound('Assets/plane.mp3')
+            self.fx = pygame.mixer.Sound(resource_path('Assets/plane.mp3'))
         elif self.type in (4, 5):
-            self.fx = pygame.mixer.Sound('Assets/chopper.mp3')
+            self.fx = pygame.mixer.Sound(resource_path('Assets/chopper.mp3'))
 
         self.fx.play(-1)
 
@@ -183,19 +184,19 @@ class Bullet(pygame.sprite.Sprite):
             powerup_bullet = True
 
         if type_ == 1:
-            self.image = pygame.image.load('Assets/Bullets1.png')
+            self.image = pygame.image.load(resource_path('Assets/Bullets1.png'))
             self.image = pygame.transform.scale(self.image, (20, 40))
         if type_ == 2:
-            self.image = pygame.image.load('Assets/Bullets2.png')
+            self.image = pygame.image.load(resource_path('Assets/Bullets2.png'))
             self.image = pygame.transform.scale(self.image, (15, 30))
         if type_ == 3:
-            self.image = pygame.image.load('Assets/Bullets3.png')
+            self.image = pygame.image.load(resource_path('Assets/Bullets3.png'))
             self.image = pygame.transform.scale(self.image, (20, 40))
         if type_ in (4, 5):
-            self.image = pygame.image.load('Assets/Bullets4.png')
+            self.image = pygame.image.load(resource_path('Assets/Bullets4.png'))
             self.image = pygame.transform.scale(self.image, (20, 20))
         if type_ == 6:
-            self.image = pygame.image.load('Assets/red_fire.png')
+            self.image = pygame.image.load(resource_path('Assets/red_fire.png'))
             self.image = pygame.transform.scale(self.image, (15, 30))
 
         self.rect = self.image.get_rect(center=(x, y))
@@ -230,7 +231,7 @@ class Explosion(pygame.sprite.Sprite):
         self.img_list = []
         for i in range(3 if type_ == 1 else 8):  # Ajuste o intervalo conforme necessário
             # Carrega a imagem
-            img = pygame.image.load(os.path.join('Assets', f'Explosion{i+2}.png'))
+            img = pygame.image.load(resource_path(os.path.join('Assets', f'Explosion{i+2}.png')))
             # Obtém as dimensões da imagem original
             w, h = img.get_width(), img.get_height()
             # Redimensiona a imagem
@@ -259,7 +260,7 @@ class Fuel(pygame.sprite.Sprite):
     def __init__(self, x, y):
         super(Fuel, self).__init__()
 
-        self.image = pygame.image.load('Assets/fuel.png')
+        self.image = pygame.image.load(resource_path('Assets/fuel.png'))
         self.rect = self.image.get_rect(center=(x, y))
 
     def update(self):
@@ -274,7 +275,7 @@ class Powerup(pygame.sprite.Sprite):
     def __init__(self, x, y):
         super(Powerup, self).__init__()
 
-        self.image = pygame.image.load('Assets/powerup.png')
+        self.image = pygame.image.load(resource_path('Assets/powerup.png'))
         self.rect = self.image.get_rect(center=(x, y))
 
     def update(self):
@@ -284,73 +285,3 @@ class Powerup(pygame.sprite.Sprite):
 
     def draw(self, win):
         win.blit(self.image, self.rect)
-
-
-class Button(pygame.sprite.Sprite):
-    def __init__(self, img, scale, x, y):
-        super(Button, self).__init__()
-        
-        self.scale = scale
-        self.image = pygame.transform.scale(img, self.scale)
-        self.rect = self.image.get_rect()
-        self.rect.x = x
-        self.rect.y = y
-
-        self.clicked = False
-
-    def update_image(self, img):
-        self.image = pygame.transform.scale(img, self.scale)
-
-    def draw(self, win):
-        action = False
-        pos = pygame.mouse.get_pos()
-        if self.rect.collidepoint(pos):
-            if pygame.mouse.get_pressed()[0] and not self.clicked:
-                action = True
-                self.clicked = True
-
-            if not pygame.mouse.get_pressed()[0]:
-                self.clicked = False
-
-        win.blit(self.image, self.rect)
-        return action
-
-class Message:
-    def __init__(self, x, y, size, text, font, color, win):
-        self.win = win
-        self.color = color
-        self.x, self.y = x, y
-        if not font:
-            self.font = pygame.font.SysFont("Verdana", size)
-            anti_alias = True
-        else:
-            self.font = pygame.font.Font(font, size)
-            anti_alias = False
-        self.image = self.font.render(text, anti_alias, color)
-        self.rect = self.image.get_rect(center=(x,y))
-        self.shadow = self.font.render(text, anti_alias, (54,69,79))
-        self.shadow_rect = self.image.get_rect(center=(x+2,y+2))
-        
-    def update(self, text=None, shadow=True):
-        if text:
-            self.image = self.font.render(f"{text}", False, self.color)
-            self.rect = self.image.get_rect(center=(self.x,self.y))
-            self.shadow = self.font.render(f"{text}", False, (54,69,79))
-            self.shadow_rect = self.image.get_rect(center=(self.x+2,self.y+2))
-        if shadow:
-            self.win.blit(self.shadow, self.shadow_rect)
-        self.win.blit(self.image, self.rect)
-
-class BlinkingText(Message):
-    def __init__(self, x, y, size, text, font, color, win):
-        super(BlinkingText, self).__init__(x, y, size, text, font, color, win)
-        self.index = 0
-        self.show = True
-
-    def update(self):
-        self.index += 1
-        if self.index % 40 == 0:
-            self.show = not self.show
-
-        if self.show:
-            self.win.blit(self.image, self.rect)
